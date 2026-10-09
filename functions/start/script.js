@@ -13,10 +13,10 @@ console.log(greet("Nawaal"));
 console.log(greet("Andrea"))
 
 function add(a, b) {
-  return "You get " + a + b + ", smartass!";
+  return  a + b;
 }
 
-console.log(add(4, 6))
+console.log("You get " + add(10, 6) + ", smartass!!")
 // TODO 1: call greet with your own name and log what it gives back.
 
 // ---------- Part 2: sound ----------

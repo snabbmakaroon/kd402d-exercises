@@ -16,7 +16,7 @@ const note1 = "E4";
 const note2 = "F4";
 const note3 = "A4";
 let duration1 = "8n";
-duration1 = "2n"
+
 
 function exercise1(start) {
   synth.triggerAttackRelease(note1, duration1, start);
