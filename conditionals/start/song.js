@@ -5,47 +5,70 @@
 
 // ---------- Step 1: the instruments, as functions ----------
 // Each one plays at time: the exact moment Tone hands us.
+let beat = 1
+let bar = 1
+let isLively = true
+
 function playBass(time) {
   bass.triggerAttackRelease("C2", "8n", time);
 }
 
 // TODO 1a: write playChord(time): play "C4", "E4" and "G4" on synth, all three at time, all "4n" long.
+function Cmaj(duration, time) {
+  synth.triggerAttackRelease("C4", duration, time);
+  synth.triggerAttackRelease("E4", duration, time);
+  synth.triggerAttackRelease("G4", duration, time);
+}
+
+function playChord(time){
+  Cmaj("8n", time)
+}
 // TODO 1b: write playMelody(time): play "G4" on synth, "8n" long, at time.
+function playMelody(time) {
+  synth.triggerAttackRelease("G4", "8n", time);
+}
 
 // ---------- Step 2: hand the beat to Tone ----------
 // Tone calls playStep for us, once every beat, and hands it the time to play at.
 function playStep(time) {
-  playBass(time);
+  console.log("bar " + bar + ", beat " + beat);
+
+  if (beat === 1) {
+    playBass(time);
+  }
+
+  if (beat === 1 || beat === 3) {
+    playChord(time);
+  }
+
+  if (isLively && beat === 4) {
+    synth.triggerAttackRelease("C5", "16n", time);
+  }
+
+  if (bar > 2 && beat !==1) {
+    if (bar <= 4) {
+      console.log("poop");
+    playMelody(time);
+  }
+  else if (bar > 4 && bar < 7) {
+    synth.triggerAttackRelease("A4", duration, time)
+  }
+  else {
+    synth.triggerAttackRelease("E4", duration, time)
+  }
+
+
+  }
+    beat += 1;
+  if (beat > 4) {
+      beat = 1
+      bar += 1
+    }
+
 }
 
 new Tone.Loop(playStep, "4n").start(0); // "4n": once every beat
 
-// Press Play: you should hear the bass on every beat. Press Stop to end it.
-
-// ---------- Step 3: count the beats ----------
-// TODO 3a: at the top of this file, make a variable for the beat: let beat = 1;
-// TODO 3b: at the end of playStep, make it one bigger: beat = beat + 1;
-// TODO 3c: below that, start again after beat 4:
-//          if (beat > 4) {
-//            beat = 1;
-//          }
-// TODO 3d: at the start of playStep, log it: console.log("beat " + beat);
-//          The console should count 1, 2, 3, 4, 1, 2, 3, 4 …
-// TODO 3e: in startSong (at the bottom), add beat = 1; as its first line, so Play starts from 1 again.
-
-// ---------- Step 4: decide what plays on which beat ----------
-// TODO 4a: in playStep, put playBass(time); inside if (beat === 1) { … }. Now the bass plays on beat 1 only.
-// TODO 4b: play the chord on beats 1 and 3: if (beat === 1 || beat === 3) { playChord(time); }
-// TODO 4c: guard a sound with a yes/no fact AND a beat. At the top of the file: let isLively = true;
-//          Then in playStep: if (isLively && beat === 4) { synth.triggerAttackRelease("C5", "16n", time); }
-//          Play it with isLively true, then false. Both sides have to be true for the high note.
-
-// ---------- Step 5: give the song sections ----------
-// TODO 5a: make a second variable at the top: let bar = 1;
-// TODO 5b: when the beat goes back to 1, the bar goes up by one. Add bar = bar + 1; inside if (beat > 4).
-//          Log the bar too: console.log("bar " + bar + ", beat " + beat);  And reset it in startSong.
-// TODO 5c: bring the melody in after the intro, and never on beat 1:
-//          if (bar > 2 && beat !== 1) { playMelody(time); }
 
 // ---------- Step 6: change the melody as the song moves on ----------
 // TODO 6a: in playMelody, use if / else if / else on bar:
@@ -54,6 +77,7 @@ new Tone.Loop(playStep, "4n").start(0); // "4n": once every beat
 
 // Runs when you press Play: start counting from the top, then start Tone's clock.
 function startSong() {
+  beat = 1
   Tone.Transport.stop();
   Tone.Transport.start();
 }
