@@ -2,12 +2,14 @@
 // A comparison is a question. Its answer is true or false.
 
 function exercise2(start) {
-  let duration = "8n";
-  let bpm = 90;
+  let duration = "4n";
+  let bpm = 120;
 
   synth.triggerAttackRelease("E4", duration, start);
 
   console.log("Exercise 2: is duration 8n? " + (duration === "8n"));
+  console.log("Is duration NOT 4n? " + (duration !== "4n"))
+  console.log("Is the tempo more than 100? " + (bpm > 100))
   // Keep the round brackets around the comparison. Without them, JavaScript glues the text
   // and duration together first, and compares that.
 
