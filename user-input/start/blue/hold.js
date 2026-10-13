@@ -3,10 +3,11 @@
 // After each step: save, click the page, press keys, check the console, and commit.
 
 // The instrument. B1 changes it.
-const synth = new Tone.Synth().toDestination();
+const synth = new Tone.PolySynth().toDestination();
 
 // What the instrument remembers between key presses.
 let octave = 4;
+let isMuted = false
 
 // Which note does this key play? "" means: not a note.
 function noteForKey(key, oct) {
@@ -33,22 +34,57 @@ function noteForKey(key, oct) {
 function handleKeyDown(event) {
   Tone.start(); // sound can only start after a key press or a click
 
-  const key = event.key.toLowerCase();
-  let playOctave = octave;
-  if (event.shiftKey) {
-    playOctave = octave + 1;
+  if (event.repeat) {
+    return;
   }
 
+  const key = event.key.toLowerCase();
+  let playOctave = octave;
+  if (key === "x") {
+    synth.releaseAll();
+    octave += 1;
+    console.log(octave);
+  } else if (key === "z") {
+    synth.releaseAll();
+    octave -= 1;
+  } else if (key === "m") {
+    isMuted = !isMuted;
+    console.log("what is isMuted now? " + isMuted)
+  }
+  if (octave > 6) {
+    octave = 6
+  } else if (octave < 2) {
+    octave = 2
+  }
+
+
+
+//if (event.shiftKey) {
+//  playOctave = octave + 1;
+// }
+
   const note = noteForKey(key, playOctave);
-  if (note !== "") {
-    synth.triggerAttackRelease(note, "8n");
+  if (note !== "" && isMuted !== true) {
+    synth.triggerAttack(note);
     console.log("Key " + event.key + " played " + note);
+  } else if (key === "z" || key === "x" || key === "m") {
+    console.log("this key is changing stuff " + key)
   } else {
     console.log("Key " + event.key + " plays nothing");
   }
 }
 
+function handleKeyUp (event) {
+  const key = event.key.toLowerCase(); // i need help here, not exactly sure what these constants do
+  const note = noteForKey(key, octave);
+
+    if (note !== "") {
+    synth.triggerRelease(note);
+    synth.triggerRelease(noteForKey(key, octave + 1))
+  }
+}
 document.addEventListener("keydown", handleKeyDown);
+document.addEventListener("keyup", handleKeyUp);
 
 // ---------- B1: hold to sustain ----------
 // TODO B1a: change Tone.Synth to Tone.PolySynth in the first line. A PolySynth plays several
