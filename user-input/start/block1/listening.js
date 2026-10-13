@@ -7,12 +7,42 @@ const synth = new Tone.Synth().toDestination();
 
 // ---------- Exercise 1: hear the event ----------
 // 1a Before you press anything, write down what you think event.key will be for:
-//    a   7   the space bar   Shift   the up arrow
+// nothing will make a noise yet bc we havent coded it to do anything yet
+//    a, nothing  7, nothing   the space bar, nothing   Shift, nothing   the up arrow, nothing
 // 1b Click the page and press them. Was each one what you expected?
-document.addEventListener("keydown", function (event) {
+function handleKeyDown(event){
+  console.log("SLAAAAYYYY")
   Tone.start(); // sound can only start after a key press or a click
   console.log(event.key);
-});
+    if (event.key === "a") {
+      synth.triggerAttackRelease("C4", "8n");
+    } else if (event.key === "s") {
+      synth.triggerAttackRelease("D4", "8n");
+    } else if (event.key === "d") {
+      synth.triggerAttackRelease("E4", "8n");
+    } else if (event.key === "f") {
+      synth.triggerAttackRelease ("F4", "8n");
+    } else if (event.key === "g") {
+      synth.triggerAttackRelease ("G4", "8n");
+    } else if (event.key === "h") {
+      synth.triggerAttackRelease ("A4", "8n");
+    } else if (event.key === "j") {
+      synth.triggerAttackRelease ("B4", "8n");
+    } else if (event.key === "k") {
+      synth.triggerAttackRelease ("C5", "8n");
+    } else if (event.key === "w") {
+      synth.triggerAttackRelease ("C#4", "8n");
+    } else if (event.key === "e") {
+      synth.triggerAttackRelease ("D#4", "8n");
+    } else if (event.key === "t") {
+      synth.triggerAttackRelease ("F#4", "8n");
+    } else if (event.key === "y") {
+      synth.triggerAttackRelease ("G#4", "8n");
+    } else if (event.key === "u") {
+      synth.triggerAttackRelease ("A#4", "8n");
+    }
+};
+document.addEventListener("keydown", handleKeyDown);
 
 // ---------- Exercise 2: one key, one sound ----------
 // TODO 2: inside the listener above, under the console.log, play "C4" when the key is "a":
@@ -37,3 +67,5 @@ document.addEventListener("keydown", function (event) {
 //          Save, and don't press anything yet: what does the console show? Now press keys.
 // TODO 4c: look through your file for a line that calls handleKeyDown(). Is there one?
 //          In a comment, say who calls handleKeyDown, and when.
+// Line 45 calls the handleKeyDown function any time a key is pressed on the keyboard,
+// then it depends on the key what note plays; thats what all the else if statements are for
