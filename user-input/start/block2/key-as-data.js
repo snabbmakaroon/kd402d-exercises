@@ -11,14 +11,48 @@ let octave = 4;
 function handleKeyDown(event) {
   Tone.start(); // sound can only start after a key press or a click
   console.log(event.key);
-
-  if (event.key === "a") {
-    synth.triggerAttackRelease("C4", "8n");
-  } else if (event.key === "s") {
-    synth.triggerAttackRelease("D4", "8n");
-  } else if (event.key === "d") {
-    synth.triggerAttackRelease("E4", "8n");
+  let playOctave = octave;
+  if (event.shiftKey) {
+    playOctave = octave + 1;
   }
+  const note = noteForKey(event.key.toLowerCase(), playOctave);
+  if (note !== "") {
+    synth.triggerAttackRelease (note, "8n");
+    console.log("Key " + event.key + " played " + note);
+  } else {
+    console.log("Key " + event.key + " plays nothing bitch!")
+  }
+
+ }
+
+
+function letterNote(key, octave) {
+  if (key.length === 1 && key >= "a" && key <= "g") {
+    return key.toUpperCase() + octave;
+  }
+  return "";
+}
+
+function noteForKey(key, octave) {
+
+if (key === "a") {
+  return "C" + octave;
+} else if (key === "s") {
+  return "D" + octave;
+} else if (key === "d") {
+  return "E" + octave;
+} else if (key === "f") {
+  return "F" + octave;
+} else if (key === "g") {
+  return "G" + octave;
+} else if (key === "h") {
+  return "A" + octave;
+} else if (key === "j") {
+  return "B" + octave;
+} else if (key === "k") {
+  return "C" + (octave + 1)
+}
+  return ""
 }
 
 document.addEventListener("keydown", handleKeyDown);
@@ -35,6 +69,8 @@ document.addEventListener("keydown", handleKeyDown);
 //            }
 //          Press a to g. Then press h, Enter and Shift: nothing should play.
 // TODO 5c: in a comment, say what event.key.length === 1 checks, and why it's there.
+// the event.key.length === 1 checks that the key only has one letter on it, so anything
+// that has more won't play
 
 // ---------- Exercise 6: keys are piano keys ----------
 // Now the position on the keyboard decides the note: the home row is a piano's white keys.
@@ -60,6 +96,7 @@ document.addEventListener("keydown", handleKeyDown);
 // ---------- Exercise 7: Shift for an octave ----------
 // event.shiftKey is a boolean: true while Shift is held down.
 // 7a Predict, then check in the console: what is event.key when you hold Shift and press a?
+// it will just say shift and "A" in upper case? but no sounds
 // TODO 7b: play one octave higher while Shift is held:
 //            let playOctave = octave;
 //            if (event.shiftKey) {
